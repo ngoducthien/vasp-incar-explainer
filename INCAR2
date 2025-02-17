@@ -1,0 +1,41 @@
+# Step 1: INCAR.DFT (default PBE)
+#  ISMEAR = 0
+#  SIGMA  = 0.01
+#  GGA    = PE
+#  ENCUT  = 520
+#  NBANDS = 48
+#  EDIFF  = 1.E-6
+#  NELM   = 256
+
+# Step 2: INCAR.DIAG (virtual orbitals)
+ISMEAR  = 0
+SIGMA   = 0.01
+GGA     = PE
+ENCUT   = 520
+ALGO    = Exact
+NBANDS  = 48
+EDIFF   = 1.E-6
+NELM    = 256
+LOPTICS = .TRUE.
+NEDOS   = 2000
+
+# Step 3: INCAR.HSE (HSE06 + WANNIER90)
+# ISMEAR     = 0
+# SIGMA      = 0.01
+# ENCUT      = 520
+# LHFCALC    = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25
+# ALGO       = D ; TIME = 0.4 ; LDIAG = .TRUE. 
+# NKRED      = 2
+# EDIFF      = 1.E-6
+# NELM       = 256
+# NBANDS     = 48
+# LWANNIER90 = .TRUE.
+
+# Step 3: INCAR.G0W0 (G0W0 + WANNIER90)
+# ALGO       = GW0 ; LSPECTRAL = .TRUE. ; NOMEGA = 50
+# NBANDS     = 48
+# ENCUT      = 520
+# EDIFF      = 1.E-6
+# NELM       = 1
+# LRPA       = .FALSE.
+# LWANNIER90 = .TRUE.
