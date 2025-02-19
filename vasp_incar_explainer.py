@@ -9,175 +9,143 @@ file_path = sys.argv[1]
 
 # Categories of VASP tags
 vasp_categories = {
-    1: "General settings",
-    2: "Hybrid-DFT calculations",
-    3: "Optical properties & DFTP",
-    4: "Parallelization",
-    5: "Ionic Relaxation",
-    6: "Electronic Relaxation (SCF)",
-    7: "Write flags",
-    8: "DOS settings",
-    9: "DFT+U parameters",
+    1: "General Settings",
+    2: "Hybrid-DFT Calculations",
+    3: "Optical Properties & Time-Dependent DFT",
+    4: "Parallelization Settings",
+    5: "Ionic Relaxation & Molecular Dynamics",
+    6: "Electronic Relaxation (SCF Settings)",
+    7: "File Output Flags",
+    8: "DOS & Band Structure Settings",
+    9: "LDA+U Settings",
     10: "Miscellaneous"
 }
 
 # Mapping VASP tags to categories and descriptions
 vasp_tags = {
-    # ['TAG': CATEGORY]
-    # General settings
-    # general_settings = [
-    'SYSTEM':     (1, 'Name of System'),
-    'PREC':       (1, 'Options: Normal, Medium, High, Low, Accurate'),
-    'ISTART':     (1, 'Startjob: 0-new 1-cont 2-samecut'),
-    'ISPIN':      (1, 'Spin polarized calculation (2-yes 1-no)'),
-    'ICHARG':     (1, 'Initial charge density: 1-file 2-atom 10-cons 11-DOS'),
-    'INIWAV':     (1, 'Initial electr wf. : 0-lowe 1-rand'),
-    'MAGMOM':     (1, 'Initial mag moment / atom'),
-    #]
+    # General Settings
+    'ICHARG':     (1, 'Initial charge density: 1-file, 2-atom, 10-constant, 11-DOS'),
+    'INIWAV':     (1, 'Initial wavefunction: 0-from file, 1-random'),
+    'ISPIN':      (1, 'Spin polarization: 1-no, 2-yes'),
+    'ISTART':     (1, 'Job start mode: 0-new, 1-continue, 2-same cutoff'),
+    'MAGMOM':     (1, 'Initial magnetic moments per atom'),
+    'PREC':       (1, 'Precision: Normal, Medium, High, Low, Accurate'),
+    'SYSTEM':     (1, 'System name'),
 
     # Hybrid-DFT Calculations
-    # hybrid_calculation = [
-    'LHFCALC':    (2, 'Hartree Fock is set to'),
-    'HFSCREEN':   (2, 'screening length'),
-    'AEXX':       (2, '% HF exchange contribution - PBE0'),
-    'AGGAX':      (2, 'GGA exchange part'),
-    'AGGAC':      (2, 'GGA correlation'),
-    'ALDAC':      (2, 'LDA correlation'),
-    'PRECFOCK':   (2, 'Normal, Fast or Accurate (Low or Medium for compatibility)'),
-    'ENCUTFOCK':  (2, 'apply spherical cutoff to Coloumb kernel'),
-    'LMAXFOCK':   (2, 'truncation for augmentation on plane wave grid'),
-    'HFLMAXF':    (2, ''),
-    'LMAXFOCKAE': (2, 'truncation for all-electron charge restoration on plane wave grid'),
-    'LTHOMAS':    (2, 'Thomas Fermi screening in HF'),
-    'NKRED':      (2, 'specifies an uniform reduction factor for the q-point grid representation in GW calculations'),
-    'NKREDX':     (2, 'Reduction factor for the q-point grid along reciprocal direction b1.'),
-    'NKREDY':     (2, 'Reduction factor for the q-point grid along reciprocal direction b2.'),
-    'NKREDZ':     (2, 'Reduction factor for the q-point grid along reciprocal direction b3.'),
-    'EVENONLY':   (2, 'use only even q-grid points'),
-    'ODDONLY':    (2, 'use only odd q-grid points'),
+    'AEXX':       (1, 'HF exchange fraction (PBE0: 0.25)'),
+    'AGGAC':      (1, 'GGA correlation contribution'),
+    'AGGAX':      (1, 'GGA exchange contribution'),
+    'ALDAC':      (1, 'LDA correlation contribution'),
+    'ENCUTFOCK':  (1, 'Energy cutoff for Coulomb kernel'),
+    'EVENONLY':   (2, 'Use only even q-grid points'),
+    'HFLMAXF':    (1, 'Maximum L value in Fock matrix'),
+    'HFSCREEN':   (1, 'Screening length in hybrid functionals'),
+    'LHFCALC':    (1, 'Enable Hartree-Fock: True/False'),
+    'LMAXFOCK':   (1, 'Augmentation function cutoff'),
+    'LMAXFOCKAE': (1, 'AE augmentation truncation'),
+    'LTHOMAS':    (2, 'Thomas-Fermi screening in HF'),
+    'NKRED':      (2, 'Reduction factor for q-point grid in GW'),
+    'NKREDX':     (2, 'Reduction factor for b1 direction'),
+    'NKREDY':     (2, 'Reduction factor for b2 direction'),
+    'NKREDZ':     (2, 'Reduction factor for b3 direction'),
+    'ODDONLY':    (2, 'Use only odd q-grid points'),
+    'PRECFOCK':   (1, 'Fock matrix precision: Normal, Fast, Accurate'),
     'TIME':       (2, 'Special control tag'),
-    #]
-      
-    # Optical properties & DFTP
-    # optical_properties = [
-    'LOPTICS':    (3, 'optical properties'),
-    'CSHIFT':     (3, 'complex shift for real part using Kramers Kronig'),
-    'LNABLA':     (3, 'use nabla operator in PAW spheres'),
-    'LEPSILON':   (3, 'determine dielectric tensor'),
-    'LRPA':       (3, 'only Hartree local field effects (RPA)'),
-    #]
 
-    # Parallelization
-    # parallelization = [
-    'NPAR':       (4, 'Parallelization over bands'),
+    # Optical Properties & Time-Dependent DFT
+    'CSHIFT':     (3, 'Complex shift for Kramers-Kronig'),
+    'LEPSILON':   (3, 'Compute dielectric tensor'),
+    'LNABLA':     (3, 'Use nabla operator in PAW spheres'),
+    'LOPTICS':    (3, 'Calculate optical properties'),
+    'LRPA':       (3, 'Include only Hartree local-field effects'),
+
+    # Parallelization Settings
     'KPAR':       (4, 'Parallelization over k-points'),
-    'NCORE':      (4, 'Number of cores per group for hybrid parallelization'),
-    'LPLANE':     (4, 'Use plane-wise data distribution (True/False, improves scaling for large systems)'),
-    #]
+    'LPLANE':     (4, 'Use plane-wise distribution (improves scaling)'),
+    'NCORE':      (4, 'Cores per group for hybrid parallelization'),
+    'NPAR':       (4, 'Parallelization over bands'),
 
-    # Ionic Relaxation
-    # ionic_relaxation = [
-    'NSW':        (5, 'Max Number of ISC steps: 0- Single Point'),
-    'IBRION':     (5, 'Ionic Relax.: 0-MD 1-qNewton-RaphsonElectronic 2-CG'),
-    'ISIF':       (5, 'Stress and Relaxation: 2-Ion 3-cell+ion'),
-    'EDIFFG':     (5, 'Stopping criteria for ionic self cons steps'),
-    'POTIM':      (5, 'Time-step for ion-motion (fs)'),
-    #]
+    # Ionic Relaxation & Molecular Dynamics
+    'EDIFFG':     (5, 'Convergence criterion for ionic relaxation'),
+    'IBRION':     (5, 'Ionic relaxation: 0-MD, 1-quasi-Newton, 2-CG'),
+    'ISIF':       (5, 'Relaxation mode: 2-ions, 3-cell+ions'),
+    'NSW':        (5, 'Max ionic steps (0 for single point)'),
+    'POTIM':      (5, 'Ionic time step (fs)'),
 
-    # Electronic Relaxation (SCF)
-    # electronic_relaxation = [
-    'ENCUT':      (6, 'Kinetic Energy Cut-off in eV'),
-    'NELM':       (6, 'Max Number of Elec Self Cons Steps'),
-    'NELMDL':     (6, 'Number of non-SC at the beginning'),
-    'NELMIN':     (6, 'Min Number of ESC steps'),
-    'LREAL':      (6, 'Real space projection'),
-    'EDIFF':      (6, 'Stopping criteria for ESC'),
-    'ALGO':       (6, 'Normal (Davidson), Fast, Very_Fast (RMM-DIIS)'),
-    'IALGO':      (6, 'Electronic algorithm minimization'),
-    'IMIX':       (6, 'Mixing scheme for charge density'),
-    'INIMIX':     (6, 'Initial mixing scheme'),
-    'MAXMIX':     (6, 'Maximum number of steps stored for Broyden mixing'),
-    'AMIX':       (6, 'Linear mixing parameter for charge density'),
+    # Electronic Relaxation (SCF Settings)
+    'ALGO':       (6, 'SCF algorithm: Normal | VeryFast | Fast | Conjugate | All | Damped | Exact'),
+    'AMIN':       (6, 'Minimum mixing parameter'),
+    'AMIX':       (6, 'Linear mixing parameter'),
+    'AMIX_MAG':   (6, 'Linear mixing for magnetization density'),
     'BMIX':       (6, 'Inverse Kerker length for charge mixing'),
-    'AMIX_MAG':   (6, 'Linear mixing parameter for magnetization density'),
-    'BMIX_MAG':   (6, 'Inverse Kerker length for magnetization density mixing'),
-    'AMIN':       (6, 'Minimal mixing parameter to stabilize mixing'),
-    'MIXPRE':     (6, 'Preconditioner for charge density mixing'),
+    'BMIX_MAG':   (6, 'Inverse Kerker length for magnetization mixing'),
+    'EDIFF':      (6, 'SCF convergence criterion'),
+    'ENCUT':      (6, 'Energy cutoff (eV)'),
+    'IALGO':      (6, 'Electronic minimization algorithm'),
+    'IMIX':       (6, 'Charge density mixing scheme'),
+    'INIMIX':     (6, 'Initial mixing scheme'),
+    'LREAL':      (6, 'Real-space projection'),
+    'MAXMIX':     (6, 'Max steps stored for Broyden mixing'),
+    'MIXPRE':     (6, 'Preconditioner for mixing'),
+    'NELM':       (6, 'Max electronic SCF steps'),
+    'NELMDL':     (6, 'Non-SCF steps at the start'),
+    'NELMIN':     (6, 'Min electronic SCF steps'),
     'WC':         (6, 'Weight factor for Kerker mixing'),
-    #]
 
-    # Write flags
-    # write_flags = [
-    'LCHARG':     (7, 'Create CHGCAR'),
-    'LAECHG':     (7, 'Create AECCAR0 (core) & AECCAR2 (valence)'),
-    'LWAVE':      (7, 'Create WAVECAR'),
-    'LVTOT':      (7, 'Create LOCPOT, total local potential'),
-    'LELF':       (7, 'Create ELFCAR'),
-    'LHVAR':      (7, 'Create LOCPOT, Hartree potential only'),
-    'LORBIT':     (7, 'Split the bands, create PROOUT'),
-    'LORBMOM':    (7, 'specifies whether the orbital moments are written out'),
-    #]
-    # DOS settings
-    # dos_seting = [
-    'NBANDS':     (8, 'No. of bands included in the calculation'),
-    'ISMEAR':     (8, '-5-DOS, 2-file, 1-Fermi, 0-Gaussian'),
-    'SIGMA':      (8, 'Insulators/semiconductors [0.1]  metals [0.05]'),
-    'NEDOS':      (8, 'Number of grid points in DOS'),
-    'EMAX':       (8, 'Energy-range for DOSCAR file'),
-    'EMIN':       (8, 'Energy-range for DOSCAR file'),
-    #]
-    # LDA + U parameters
-    # lda_settings = [
-    'LDAU':       (9, 'Enable LDA+U correction (True/False)'),
-    'LDAUTYPE':   (9, 'Type of LDA+U correction (1: rotationally invariant, 2: simplified)'),
-    'LDAUL':      (9, 'Orbital quantum number for each species (0: s, 1: p, 2: d, 3: f)'),
-    'LDAUU':      (9, 'On-site Coulomb U parameter (eV) for each species'),
-    'LDAUJ':      (9, 'Exchange interaction parameter J (eV) for each species'),
-    'LDAUPRINT':  (9, 'Controls output of LDA+U-related information (0-3, higher values give more details)'),
-    'LMAXMIX':    (9, 'Maximum angular momentum for charge density mixing (default depends on POTCAR)'),
-    #]
-    # Uncategorized/OQMD codes
-    # uncategorized = [
-    'PSTRESS':    (10, 'pullay stress'),
-    'EPSILON':    (10, 'bulk dielectric constant'),
-    'LDIPOL':     (10, 'correct potential (dipole corrections)'),
-    'IDIPOL':     (10, '1-x, 2-y, 3-z, 4-all directions'),
-    'MAGNETISM':  (10, ''),
-    'ADDGRID':    (10, 'Improve the grid accuracy'),
-    'NGXF':       (10, 'FFT mesh for charges'),
-    'NGYF':       (10, 'FFT mesh for charges'),
-    'NGZF':       (10, 'FFT mesh for charges'),
-    'NBLK':       (10, 'Blocking for some BLAS calls'),
-    'NWRITE':     (10, 'Verbosity write-flag (how much is written)'),
-    'NBLOCK':     (10, 'Inner block'),
-    'KBLOCK':     (10, 'Outer block'),
-    'IWAVPR':     (10, 'Prediction of wf.: 0-non 1-charg 2-wave 3-comb'),
-    'ISYM':       (10, 'Symmetry: 0-nonsym 1-usesym'),
-    'SYMPREC':    (10, 'Precession in symmetry routines'),
-    'LCORR':      (10, 'Harris-correction to forces'),
-    'TEBEG':      (10, 'Temperature during run'),
-    'TEEND':      (10, 'Temperature during run'),
-    'SMASS':      (10, 'Nose mass-parameter (am)'),
-    'NPACO':      (10, 'Distance for P.C.'),
-    'APACO':      (10, 'Nr. of slots for P.C.'),
-    'POMASS':     (10, 'Mass of ions in am'),
-    'ZVAL':       (10, 'Ionic valence'),
-    'RWIGS':      (10, 'Wigner-Seitz radii'),
+    # File Output Flags
+    'LAECHG':     (7, 'Write AECCAR0 (core) & AECCAR2 (valence)'),
+    'LCHARG':     (7, 'Write CHGCAR'),
+    'LELF':       (7, 'Write ELFCAR'),
+    'LHVAR':      (7, 'Write LOCPOT (Hartree potential only)'),
+    'LORBIT':     (7, 'Write PROOUT (band splitting)'),
+    'LORBMOM':    (7, 'Write orbital moments'),
+    'LVTOT':      (7, 'Write LOCPOT (total local potential)'),
+    'LWAVE':      (7, 'Write WAVECAR'),
+
+    # DOS & Band Structure Settings
+    'EMAX':       (8, 'DOS upper energy limit'),
+    'EMIN':       (8, 'DOS lower energy limit'),
+    'ISMEAR':     (8, 'Smearing: -5-DOS, 2-file, 1-Fermi, 0-Gaussian'),
+    'NBANDS':     (8, 'Number of bands'),
+    'NEDOS':      (8, 'DOS grid points'),
+    'SIGMA':      (8, 'Smearing width: Insulators [0.1], Metals [0.05]'),
+
+    # LDA+U Settings
+    'LDAU':       (9, 'Enable LDA+U'),
+    'LDAUJ':      (9, 'Exchange interaction J (eV)'),
+    'LDAUL':      (9, 'Orbital quantum number (0-s, 1-p, 2-d, 3-f)'),
+    'LDAUPRINT':  (9, 'LDA+U output verbosity (0-3)'),
+    'LDAUTYPE':   (9, 'LDA+U type: 1-rotationally invariant, 2-simplified'),
+    'LDAUU':      (9, 'On-site Coulomb U (eV)'),
+    'LMAXMIX':    (9, 'Max angular momentum for charge mixing'),
+
+    # Miscellaneous
+    'ADDGRID':    (10, 'Improve FFT grid accuracy'),
+    'DIPOL':      (10, 'Dipole center'),
+    'EPSILON':    (10, 'Bulk dielectric constant'),
+    'GGA':        (10, 'XC functional (e.g., PBE, AM, 91)'),
+    'IDIPOL':     (10, 'Dipole correction direction: 1-x, 2-y, 3-z, 4-all'),
+    'ISYM':       (10, 'Symmetry: 0-none, 1-use'),
+    'LASYNC':     (10, 'Asynchronous communication'),
+    'LCORR':      (10, 'Harris correction to forces'),
+    'LDIPOL':     (10, 'Enable dipole corrections'),
+    'LSCALAPACK': (10, 'Enable ScaLAPACK'),
+    'LSCALU':     (10, 'Enable LU decomposition'),
+    'MAGNETISM':  (10, 'Magnetic settings'),
     'NELECT':     (10, 'Total number of electrons'),
-    'NUPDOWN':    (10, 'Fix spin moment to specified value'),
-    'ROPT':       (10, 'Number of grid points for non-local proj in real space'),
-    'GGA':        (10, 'XC-type: e.g. PE AM or 91'),
-    'VOSKOWN':    (10, 'Use Vosko, Wilk, Nusair interpolation'),
-    'DIPOL':      (10, 'Center of cell for dipol'),
-    'WEIMIN':     (10, 'Special control tags'),
-    'EBREAK':     (10, 'Special control tags'),
-    'DEPER':      (10, 'Special control tags'),
-    'LSCALAPACK': (10, 'Switch off scaLAPACK'),
-    'LSCALU':     (10, 'Switch of LU decomposition'),
-    'LASYNC':     (10, 'Overlap communcation with calculations'),
-    'NGX':        (10, 'FFT mesh for orbitals'),
-    'NGY':        (10, 'FFT mesh for orbitals'),
-    'NGZ':        (10, 'FFT mesh for orbitals')
+    'NGXF':       (10, 'FFT mesh for charge density'),
+    'NGYF':       (10, 'FFT mesh for charge density'),
+    'NGZF':       (10, 'FFT mesh for charge density'),
+    'NUPDOWN':    (10, 'Fixed spin moment'),
+    'NWRITE':     (10, 'Output verbosity level'),
+    'POMASS':     (10, 'Atomic mass (amu)'),
+    'PSTRESS':    (10, 'Pulay stress'),
+    'SMASS':      (10, 'Nose-Hoover mass parameter'),
+    'SYMPREC':    (10, 'Symmetry precision'),
+    'TEBEG':      (10, 'Initial temperature (K)'),
+    'TEEND':      (10, 'Final temperature (K)'),
+    'ZVAL':       (10, 'Ionic valence'),
 }
 
 try:
@@ -189,7 +157,7 @@ except FileNotFoundError:
 
 uncategory_id = 10
 parsed_tags = []
-max_tag_len = max(len(tag) for tag in vasp_tags)
+max_tag_len = 0
 max_value_len = 0
 
 for line in lines:
@@ -209,6 +177,7 @@ for line in lines:
             else:
                 # If the tag is not found in the variable vasp_tags
                 parsed_tags.append((uncategory_id, tag_name, tag_value, "No description"))
+            max_tag_len = max(max_tag_len, len(tag_name))
 
 # Organize by categories and print
 for category, category_name in sorted(vasp_categories.items()):
